@@ -1,0 +1,15 @@
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-links">
+      {{ with .Site.Params.social.email }}<a href="mailto:{{ . }}">Email</a>{{ end }}
+      {{ with .Site.Params.social.github }}<a href="{{ . }}" target="_blank" rel="noopener">GitHub</a>{{ end }}
+      {{ with .Site.Params.social.linkedin }}<a href="{{ . }}" target="_blank" rel="noopener">LinkedIn</a>{{ end }}
+      {{ with .Site.Params.social.twitter }}<a href="{{ . }}" target="_blank" rel="noopener">Twitter</a>{{ end }}
+      {{ with .Site.Params.social.spotify }}<a href="{{ . }}" target="_blank" rel="noopener">Spotify</a>{{ end }}
+    </div>
+    <div class="colophon">
+      Built with <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> &middot;
+      Hosted on <a href="https://www.netlify.com" target="_blank" rel="noopener">Netlify</a>
+    </div>
+  </div>
+</footer>

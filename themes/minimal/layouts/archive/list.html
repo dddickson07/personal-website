@@ -1,0 +1,25 @@
+{{ define "main" }}
+<section class="page archive-page">
+  <h1>{{ .Title }}</h1>
+  {{ with .Content }}
+    <div class="page-content">{{ . }}</div>
+  {{ end }}
+
+  {{ $thoughts := where .Site.RegularPages "Section" "thoughts" }}
+  {{ if $thoughts }}
+    {{ range ($thoughts.GroupByDate "2006") }}
+      <h2 class="archive-year">{{ .Key }}</h2>
+      <ul class="post-list">
+        {{ range .Pages }}
+          <li>
+            <a href="{{ .Permalink }}">{{ .Title }}</a>
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2" }}</time>
+          </li>
+        {{ end }}
+      </ul>
+    {{ end }}
+  {{ else }}
+    <p>Nothing here yet — check back soon.</p>
+  {{ end }}
+</section>
+{{ end }}

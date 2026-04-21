@@ -1,0 +1,30 @@
+{{ define "main" }}
+<section class="page gallery-page">
+  <h1>{{ .Title }}</h1>
+  {{ with .Content }}
+    <div class="page-content">{{ . }}</div>
+  {{ end }}
+
+  {{ $images := .Resources.Match "*.{jpg,jpeg,png,gif,webp}" }}
+  {{ if $images }}
+    <div class="gallery-grid">
+      {{ range $images }}
+        <figure class="gallery-item">
+          <a href="{{ .RelPermalink }}" target="_blank">
+            <img src="{{ .RelPermalink }}" alt="{{ .Title }}" loading="lazy">
+          </a>
+        </figure>
+      {{ end }}
+    </div>
+  {{ end }}
+
+  {{ $pages := .Pages }}
+  {{ if $pages }}
+    <ul class="post-list">
+      {{ range $pages }}
+        <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
+      {{ end }}
+    </ul>
+  {{ end }}
+</section>
+{{ end }}

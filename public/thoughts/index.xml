@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Thoughts on David&#39;s Dots</title>
+    <link>http://localhost:1313/thoughts/</link>
+    <description>Recent content in Thoughts on David&#39;s Dots</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 13 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/thoughts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hello, world</title>
+      <link>http://localhost:1313/thoughts/hello-world/</link>
+      <pubDate>Mon, 13 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/thoughts/hello-world/</guid>
+      <description>&lt;p&gt;First note on the new site. Let&amp;rsquo;s see where this goes.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

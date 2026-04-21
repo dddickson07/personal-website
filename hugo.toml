@@ -1,0 +1,54 @@
+baseURL = "https://example.netlify.app/"
+languageCode = "en-us"
+title = "David's Dots"
+theme = "minimal"
+
+[params]
+  tagline = "A personal corner of the internet"
+  description = "Thoughts, projects, and creative pursuits — from Harvard and beyond."
+  author = "David Dickson"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[menu]
+  [[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+
+  [[menu.main]]
+    name = "Thoughts"
+    url = "/thoughts/"
+    weight = 2
+
+  [[menu.main]]
+    name = "Projects"
+    url = "/projects/"
+    weight = 3
+
+  [[menu.main]]
+    name = "Creative"
+    url = "/creative/"
+    weight = 4
+
+  [[menu.main]]
+    name = "Now"
+    url = "/now/"
+    weight = 5
+
+  [[menu.main]]
+    name = "Archive"
+    url = "/archive/"
+    weight = 6
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML", "RSS"]
+
+[params.social]
+  email = "dddickson@college.harvard.edu"
+  github = "https://github.com/daviddickson"
+  linkedin = "https://www.linkedin.com/in/david-dickson-3b3561276/"

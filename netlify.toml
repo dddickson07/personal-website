@@ -1,0 +1,14 @@
+[build]
+  command = "hugo --minify"
+  publish = "public"
+
+[build.environment]
+  HUGO_VERSION = "0.160.1"
+
+[context.production.environment]
+  HUGO_ENV = "production"
+
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
