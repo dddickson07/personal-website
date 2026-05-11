@@ -1,0 +1,4 @@
+name = "macOS Desktop"
+license = "MIT"
+description = "A macOS-style desktop UI theme for David's personal website."
+tags = ["macos", "desktop", "personal"]

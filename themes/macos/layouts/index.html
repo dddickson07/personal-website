@@ -1,0 +1,566 @@
+{{ define "main" }}
+
+{{/* ── Gather content sections ──────────────────────────────── */}}
+{{ $thoughts   := where .Site.RegularPages "Section" "thoughts" }}
+{{ $codeSec    := .Site.GetPage "/projects/code" }}
+{{ $creativeSec := .Site.GetPage "/projects/creative" }}
+{{ $codeProj   := cond (ne $codeSec nil) ($codeSec.Pages) (slice) }}
+{{ $creative   := cond (ne $creativeSec nil) ($creativeSec.Pages) (slice) }}
+{{ $goodReadsSec := .Site.GetPage "/good-reads" }}
+{{ $goodReads  := cond (ne $goodReadsSec nil) ($goodReadsSec.Pages) (slice) }}
+{{ $placesSec  := .Site.GetPage "/places" }}
+{{ $places     := cond (ne $placesSec nil) ($placesSec.Pages) (slice) }}
+{{ $gallerySec := .Site.GetPage "/gallery" }}
+{{ $gallery    := cond (ne $gallerySec nil) ($gallerySec.Pages) (slice) }}
+{{ $musicSec   := .Site.GetPage "/music" }}
+{{ $music      := cond (ne $musicSec nil) ($musicSec.Pages) (slice) }}
+{{ $nowPage    := .Site.GetPage "/now" }}
+
+{{/* ── Desktop Icons ─────────────────────────────────────────── */}}
+<div class="desktop-icons">
+  <div class="desktop-icon" data-app="finder">
+    <div class="desktop-icon-img">📁</div>
+    <div class="desktop-icon-label">Projects</div>
+  </div>
+  <div class="desktop-icon" data-app="notes">
+    <div class="desktop-icon-img">📝</div>
+    <div class="desktop-icon-label">Notes</div>
+  </div>
+</div>
+
+{{/* ════════════════════════════════════════════════════════════
+     APP WINDOW: About Me
+     ════════════════════════════════════════════════════════════ */}}
+<div class="macos-window" id="win-about"
+     style="width:580px;height:420px;top:70px;left:80px;">
+  <div class="win-chrome">
+    <div class="traffic-lights">
+      <button class="tl-btn tl-close"  onclick="closeApp('about')"></button>
+      <button class="tl-btn tl-min"    onclick="minimizeApp('about')"></button>
+      <button class="tl-btn tl-max"    onclick=""></button>
+    </div>
+    <div class="win-title">About Me</div>
+  </div>
+  <div class="about-layout">
+    {{ .Content }}
+    <div class="about-links" style="margin-top:16px;">
+      <a class="about-link-pill" href="mailto:{{ .Site.Params.social.email }}">✉️ Email</a>
+      <a class="about-link-pill" href="{{ .Site.Params.social.linkedin }}" target="_blank" rel="noopener">💼 LinkedIn</a>
+      <a class="about-link-pill" href="{{ .Site.Params.social.github }}" target="_blank" rel="noopener">🐙 GitHub</a>
+    </div>
+  </div>
+</div>
+
+{{/* ════════════════════════════════════════════════════════════
+     APP WINDOW: Finder (Projects)
+     ════════════════════════════════════════════════════════════ */}}
+<div class="macos-window" id="win-finder"
+     style="width:730px;height:490px;top:55px;left:55px;">
+  <div class="win-chrome">
+    <div class="traffic-lights">
+      <button class="tl-btn tl-close"  onclick="closeApp('finder')"></button>
+      <button class="tl-btn tl-min"    onclick="minimizeApp('finder')"></button>
+      <button class="tl-btn tl-max"    onclick=""></button>
+    </div>
+    <div class="win-title">Finder</div>
+    <div class="win-controls-right">
+      <button class="win-tool-btn" title="Search">🔍</button>
+    </div>
+  </div>
+
+  {{/* Toolbar */}}
+  <div class="finder-toolbar">
+    <button class="finder-toolbar-btn" onclick="history.back()">‹</button>
+    <button class="finder-toolbar-btn" onclick="history.forward()">›</button>
+    <span style="font-size:13px;color:#666;margin-left:4px;">David's Dots</span>
+  </div>
+
+  <div class="finder-layout">
+    {{/* Sidebar */}}
+    <div class="finder-sidebar">
+      <div class="finder-sidebar-section">Favourites</div>
+
+      <div class="finder-sidebar-item active" data-folder="about" onclick="showFinderFolder('about')">
+        <span class="finder-sidebar-icon">🏠</span> About
+      </div>
+      <div class="finder-sidebar-item" data-folder="code" onclick="showFinderFolder('code')">
+        <span class="finder-sidebar-icon">💻</span> Code
+      </div>
+      <div class="finder-sidebar-item" data-folder="creative" onclick="showFinderFolder('creative')">
+        <span class="finder-sidebar-icon">🎨</span> Creative
+      </div>
+
+      <div class="finder-sidebar-section">Library</div>
+
+      <div class="finder-sidebar-item" data-folder="good-reads" onclick="showFinderFolder('good-reads')">
+        <span class="finder-sidebar-icon">📚</span> Good Reads
+      </div>
+      <div class="finder-sidebar-item" data-folder="places" onclick="showFinderFolder('places')">
+        <span class="finder-sidebar-icon">🗺</span> Places
+      </div>
+      <div class="finder-sidebar-item" data-folder="miscellaneous" onclick="showFinderFolder('miscellaneous')">
+        <span class="finder-sidebar-icon">🗄</span> Miscellaneous
+      </div>
+    </div>
+
+    {{/* Content Panes */}}
+    <div class="finder-content-area">
+
+      {{/* About pane */}}
+      <div class="finder-pane active" id="fp-about">
+        <div class="finder-about">
+          <h2>👋 David Dickson</h2>
+          {{ .Content }}
+        </div>
+      </div>
+
+      {{/* Code Projects pane */}}
+      <div class="finder-pane" id="fp-code">
+        {{ if $codeProj }}
+          <div class="finder-list-header">
+            <span>Name</span><span>Date</span>
+          </div>
+          {{ range $codeProj }}
+          <a class="finder-list-item" href="{{ .Permalink }}">
+            <div class="finder-list-item-name">
+              <span class="finder-list-item-icon">📄</span>
+              {{ .Title }}
+            </div>
+            <span class="finder-list-item-date">{{ .Date.Format "Jan 2, 2006" }}</span>
+          </a>
+          {{ end }}
+        {{ else }}
+          <div style="padding:32px;color:#999;text-align:center;">
+            <div style="font-size:48px;margin-bottom:12px;">💻</div>
+            <div>No code projects yet — add them in <code>content/projects/code/</code></div>
+          </div>
+        {{ end }}
+      </div>
+
+      {{/* Creative Projects pane */}}
+      <div class="finder-pane" id="fp-creative">
+        {{ if $creative }}
+          <div class="finder-list-header">
+            <span>Name</span><span>Date</span>
+          </div>
+          {{ range $creative }}
+          <a class="finder-list-item" href="{{ .Permalink }}">
+            <div class="finder-list-item-name">
+              <span class="finder-list-item-icon">🎨</span>
+              {{ .Title }}
+            </div>
+            <span class="finder-list-item-date">{{ .Date.Format "Jan 2, 2006" }}</span>
+          </a>
+          {{ end }}
+        {{ else }}
+          <div style="padding:32px;color:#999;text-align:center;">
+            <div style="font-size:48px;margin-bottom:12px;">🎨</div>
+            <div>No creative projects yet — add them in <code>content/projects/creative/</code></div>
+          </div>
+        {{ end }}
+      </div>
+
+      {{/* Good Reads pane */}}
+      <div class="finder-pane" id="fp-good-reads">
+        {{ $goodReadsSection := .Site.GetPage "/good-reads" }}
+        {{ if $goodReadsSection }}
+          <div class="finder-about">
+            {{ $goodReadsSection.Content }}
+          </div>
+        {{ end }}
+        {{ if $goodReads }}
+          <div class="finder-list-header">
+            <span>Title</span><span>Date</span>
+          </div>
+          {{ range $goodReads }}
+          <a class="finder-list-item" href="{{ .Permalink }}">
+            <div class="finder-list-item-name">
+              <span class="finder-list-item-icon">📖</span>
+              {{ .Title }}
+            </div>
+            <span class="finder-list-item-date">{{ .Date.Format "Jan 2006" }}</span>
+          </a>
+          {{ end }}
+        {{ else }}
+          <div style="padding:32px;color:#999;text-align:center;">
+            <div style="font-size:48px;margin-bottom:12px;">📚</div>
+            <div>Add books and articles in <code>content/good-reads/</code></div>
+          </div>
+        {{ end }}
+      </div>
+
+      {{/* Places pane */}}
+      <div class="finder-pane" id="fp-places">
+        {{ if $places }}
+          <div class="finder-grid">
+            {{ range $places }}
+            <a class="finder-file" href="{{ .Permalink }}">
+              <span class="finder-file-icon">🗺</span>
+              <span class="finder-file-name">{{ .Title }}</span>
+            </a>
+            {{ end }}
+          </div>
+        {{ else }}
+          <div style="padding:32px;color:#999;text-align:center;">
+            <div style="font-size:48px;margin-bottom:12px;">🗺</div>
+            <div>Add places in <code>content/places/</code></div>
+          </div>
+        {{ end }}
+      </div>
+
+      {{/* Miscellaneous pane */}}
+      <div class="finder-pane" id="fp-miscellaneous">
+        {{ $misc := where .Site.RegularPages "Section" "miscellaneous" }}
+        {{ if $misc }}
+          <div class="finder-list-header">
+            <span>Name</span><span>Date</span>
+          </div>
+          {{ range $misc }}
+          <a class="finder-list-item" href="{{ .Permalink }}">
+            <div class="finder-list-item-name">
+              <span class="finder-list-item-icon">🗄</span>
+              {{ .Title }}
+            </div>
+            <span class="finder-list-item-date">{{ .Date.Format "Jan 2, 2006" }}</span>
+          </a>
+          {{ end }}
+        {{ else }}
+          <div style="padding:32px;color:#999;text-align:center;">
+            <div style="font-size:48px;margin-bottom:12px;">🗄</div>
+            <div>Add miscellaneous items in <code>content/miscellaneous/</code></div>
+          </div>
+        {{ end }}
+      </div>
+
+    </div>{{/* end finder-content-area */}}
+  </div>{{/* end finder-layout */}}
+</div>
+
+{{/* ════════════════════════════════════════════════════════════
+     APP WINDOW: Notes (Thoughts)
+     ════════════════════════════════════════════════════════════ */}}
+<div class="macos-window" id="win-notes"
+     style="width:680px;height:500px;top:65px;left:120px;">
+  <div class="win-chrome">
+    <div class="traffic-lights">
+      <button class="tl-btn tl-close"  onclick="closeApp('notes')"></button>
+      <button class="tl-btn tl-min"    onclick="minimizeApp('notes')"></button>
+      <button class="tl-btn tl-max"    onclick=""></button>
+    </div>
+    <div class="win-title">Notes</div>
+    <div class="win-controls-right">
+      <button class="win-tool-btn" title="New Note" style="font-size:18px;">✏️</button>
+    </div>
+  </div>
+
+  <div class="notes-layout">
+    {{/* Notes Sidebar */}}
+    <div class="notes-sidebar">
+      <div class="notes-sidebar-header">All Notes</div>
+
+      {{ if $thoughts }}
+        {{ range $thoughts }}
+        {{ $noteId := .File.UniqueID }}
+        <div class="notes-list-item" data-note-id="{{ $noteId }}"
+             onclick="showNote('{{ $noteId }}')">
+          <div class="note-list-title">{{ .Title }}</div>
+          <div class="note-list-date">{{ .Date.Format "Jan 2, 2006" }}</div>
+          <div class="note-list-preview">{{ .Summary | plainify | truncate 80 }}</div>
+        </div>
+        {{ end }}
+      {{ else }}
+        <div style="padding:16px;color:#8a7d5a;font-size:12px;">
+          No notes yet — add them in <code>content/thoughts/</code>
+        </div>
+      {{ end }}
+    </div>
+
+    {{/* Notes Content Area */}}
+    <div class="notes-content-area">
+      {{ if $thoughts }}
+        {{ range $thoughts }}
+        {{ $noteId := .File.UniqueID }}
+        <div class="note-body" id="note-{{ $noteId }}">
+          <h1>{{ .Title }}</h1>
+          <p style="font-size:11px;color:#8a7d5a;font-family:-apple-system,sans-serif;margin-bottom:18px;">
+            {{ .Date.Format "Monday, January 2, 2006" }}
+          </p>
+          {{ .Content }}
+        </div>
+        {{ end }}
+        <div id="notes-empty-state" class="notes-empty">
+          <span class="notes-empty-icon">📝</span>
+          <span>Select a note to read it</span>
+        </div>
+      {{ else }}
+        <div class="notes-empty">
+          <span class="notes-empty-icon">📝</span>
+          <span>No notes yet</span>
+          <span style="font-size:12px;">Add markdown files to <code>content/thoughts/</code></span>
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</div>
+
+{{/* ════════════════════════════════════════════════════════════
+     APP WINDOW: Photos (Gallery)
+     ════════════════════════════════════════════════════════════ */}}
+<div class="macos-window" id="win-photos"
+     style="width:660px;height:460px;top:75px;left:160px;">
+  <div class="win-chrome">
+    <div class="traffic-lights">
+      <button class="tl-btn tl-close"  onclick="closeApp('photos')"></button>
+      <button class="tl-btn tl-min"    onclick="minimizeApp('photos')"></button>
+      <button class="tl-btn tl-max"    onclick=""></button>
+    </div>
+    <div class="win-title">Photos</div>
+    <div class="win-controls-right">
+      <button class="win-tool-btn" title="Search">🔍</button>
+    </div>
+  </div>
+
+  <div class="photos-layout">
+    {{/* Photos Sidebar */}}
+    <div class="photos-sidebar">
+      <div class="photos-sidebar-section">Library</div>
+      <div class="photos-sidebar-item active" data-album="all" onclick="showPhotosAlbum('all')">
+        <span>🖼</span> All Photos
+      </div>
+      <div class="photos-sidebar-item" data-album="gallery" onclick="showPhotosAlbum('gallery')">
+        <span>🌄</span> Gallery
+      </div>
+      <div class="photos-sidebar-item" data-album="places" onclick="showPhotosAlbum('places')">
+        <span>📍</span> Places
+      </div>
+    </div>
+
+    {{/* Photos Content */}}
+    <div class="photos-content-area">
+
+      {{/* All Photos */}}
+      <div class="photos-album-pane" id="album-all">
+        {{ if or $gallery $places }}
+          <div class="photos-grid">
+            {{ range $gallery }}
+              {{ with .Params.image }}
+              <div class="photo-thumb">
+                <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy">
+              </div>
+              {{ else }}
+              <div class="photo-thumb">🖼</div>
+              {{ end }}
+            {{ end }}
+            {{ range $places }}
+              {{ with .Params.image }}
+              <div class="photo-thumb">
+                <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy">
+              </div>
+              {{ else }}
+              <div class="photo-thumb">📍</div>
+              {{ end }}
+            {{ end }}
+          </div>
+        {{ else }}
+          <div class="photos-empty">
+            <span class="photos-empty-icon">📷</span>
+            <span>No photos yet</span>
+            <span style="font-size:11px;">Add images to <code>content/gallery/</code> with an <code>image:</code> param</span>
+          </div>
+        {{ end }}
+      </div>
+
+      {{/* Gallery Album */}}
+      <div class="photos-album-pane" id="album-gallery" style="display:none">
+        {{ if $gallery }}
+          <div class="photos-grid">
+            {{ range $gallery }}
+              {{ with .Params.image }}
+              <div class="photo-thumb"><img src="{{ . }}" alt="{{ $.Title }}" loading="lazy"></div>
+              {{ else }}
+              <div class="photo-thumb">🌄</div>
+              {{ end }}
+            {{ end }}
+          </div>
+        {{ else }}
+          <div class="photos-empty">
+            <span class="photos-empty-icon">🌄</span>
+            <span>No gallery photos yet</span>
+          </div>
+        {{ end }}
+      </div>
+
+      {{/* Places Album */}}
+      <div class="photos-album-pane" id="album-places" style="display:none">
+        {{ if $places }}
+          <div class="photos-grid">
+            {{ range $places }}
+              {{ with .Params.image }}
+              <div class="photo-thumb"><img src="{{ . }}" alt="{{ $.Title }}" loading="lazy"></div>
+              {{ else }}
+              <div class="photo-thumb">📍</div>
+              {{ end }}
+            {{ end }}
+          </div>
+        {{ else }}
+          <div class="photos-empty">
+            <span class="photos-empty-icon">📍</span>
+            <span>No places yet</span>
+          </div>
+        {{ end }}
+      </div>
+
+    </div>{{/* end photos-content-area */}}
+  </div>
+</div>
+
+{{/* ════════════════════════════════════════════════════════════
+     APP WINDOW: Music (Good Reads / Playlist)
+     ════════════════════════════════════════════════════════════ */}}
+<div class="macos-window" id="win-music"
+     style="width:660px;height:460px;top:80px;left:140px;">
+  <div class="win-chrome">
+    <div class="traffic-lights">
+      <button class="tl-btn tl-close"  onclick="closeApp('music')"></button>
+      <button class="tl-btn tl-min"    onclick="minimizeApp('music')"></button>
+      <button class="tl-btn tl-max"    onclick=""></button>
+    </div>
+    <div class="win-title">Music</div>
+  </div>
+
+  <div class="music-layout">
+    {{/* Music Sidebar */}}
+    <div class="music-sidebar">
+      <div class="music-sidebar-section">Library</div>
+      <div class="music-sidebar-item active" data-tab="good-reads" onclick="showMusicTab('good-reads')">
+        <span>📚</span> Good Reads
+      </div>
+      <div class="music-sidebar-item" data-tab="playlist" onclick="showMusicTab('playlist')">
+        <span>🎵</span> Playlist
+      </div>
+    </div>
+
+    {{/* Music Content */}}
+    <div class="music-content-area">
+
+      {{/* Good Reads tab */}}
+      <div class="music-tab-pane" id="mtab-good-reads">
+        {{ $goodReadsSection := .Site.GetPage "/good-reads" }}
+        {{ if $goodReadsSection }}
+          <div style="padding:12px 16px 0;font-size:13px;color:#666;line-height:1.5;">
+            {{ $goodReadsSection.Content }}
+          </div>
+        {{ end }}
+        {{ if $goodReads }}
+          <div class="reads-list">
+            {{ range $goodReads }}
+            <div class="reads-item">
+              <div class="reads-title">{{ .Title }}</div>
+              {{ with .Params.author }}<div class="reads-author">by {{ . }}</div>{{ end }}
+              {{ with .Params.note }}<div class="reads-note">{{ . }}</div>{{ end }}
+              {{ if .Summary }}<div class="reads-note">{{ .Summary | plainify | truncate 200 }}</div>{{ end }}
+              {{ with .Params.category }}<span class="reads-tag">{{ . }}</span>{{ end }}
+            </div>
+            {{ end }}
+          </div>
+        {{ else }}
+          <div class="notes-empty" style="height:300px;">
+            <span style="font-size:48px;">📚</span>
+            <span>No reads yet — add them to <code>content/good-reads/</code></span>
+          </div>
+        {{ end }}
+      </div>
+
+      {{/* Playlist tab */}}
+      <div class="music-tab-pane" id="mtab-playlist" style="display:none">
+        {{ if $music }}
+          {{ range first 1 $music }}
+          <div class="music-now-playing">
+            <div class="music-album-art">🎵</div>
+            <div class="music-track-info">
+              <div class="music-track-name">{{ .Title }}</div>
+              {{ with .Params.artist }}<div class="music-artist">{{ . }}</div>{{ end }}
+            </div>
+            <div class="music-controls">
+              <button class="music-ctrl-btn">⏮</button>
+              <button class="music-ctrl-btn music-play-btn">▶</button>
+              <button class="music-ctrl-btn">⏭</button>
+            </div>
+            <div class="music-progress">
+              <span class="music-time">0:00</span>
+              <div class="music-progress-bar"><div class="music-progress-fill"></div></div>
+              <span class="music-time">3:45</span>
+            </div>
+          </div>
+          {{ end }}
+          {{ range $music }}
+          <div class="music-list-item">
+            <span class="music-item-num">♪</span>
+            <div class="music-item-info">
+              <div class="music-item-title">{{ .Title }}</div>
+              {{ with .Params.artist }}<div class="music-item-artist">{{ . }}</div>{{ end }}
+            </div>
+            {{ with .Params.duration }}<span class="music-item-dur">{{ . }}</span>{{ end }}
+          </div>
+          {{ end }}
+        {{ else }}
+          <div class="notes-empty" style="height:360px;">
+            <span style="font-size:48px;">🎵</span>
+            <span>No playlist yet — add tracks to <code>content/music/</code></span>
+            <span style="font-size:11px;color:#bbb;">Each file can have: <code>artist:</code>, <code>duration:</code></span>
+          </div>
+        {{ end }}
+      </div>
+
+    </div>{{/* end music-content-area */}}
+  </div>
+</div>
+
+{{/* ════════════════════════════════════════════════════════════
+     APP WINDOW: Calendar (Now)
+     ════════════════════════════════════════════════════════════ */}}
+<div class="macos-window" id="win-calendar"
+     style="width:490px;height:490px;top:65px;left:200px;">
+  <div class="win-chrome">
+    <div class="traffic-lights">
+      <button class="tl-btn tl-close"  onclick="closeApp('calendar')"></button>
+      <button class="tl-btn tl-min"    onclick="minimizeApp('calendar')"></button>
+      <button class="tl-btn tl-max"    onclick=""></button>
+    </div>
+    <div class="win-title">Calendar</div>
+  </div>
+
+  <div class="calendar-layout">
+    {{/* Month header */}}
+    <div class="calendar-month-header">
+      <button class="calendar-month-nav" onclick="calPrevMonth()">‹</button>
+      <span class="calendar-month-title" id="cal-month-title"></span>
+      <button class="calendar-month-nav" onclick="calNextMonth()">›</button>
+    </div>
+
+    {{/* Calendar grid */}}
+    <div class="calendar-grid-area">
+      <div class="calendar-day-names">
+        <div class="calendar-day-name">S</div>
+        <div class="calendar-day-name">M</div>
+        <div class="calendar-day-name">T</div>
+        <div class="calendar-day-name">W</div>
+        <div class="calendar-day-name">T</div>
+        <div class="calendar-day-name">F</div>
+        <div class="calendar-day-name">S</div>
+      </div>
+      <div class="calendar-days" id="cal-days"></div>
+    </div>
+
+    {{/* Now content */}}
+    <div class="calendar-now-content">
+      {{ if $nowPage }}
+        {{ $nowPage.Content }}
+      {{ else }}
+        <p style="color:#999;">Now page not found. Create <code>content/now/_index.md</code></p>
+      {{ end }}
+    </div>
+  </div>
+</div>
+
+{{ end }}

@@ -1,0 +1,54 @@
+{{ define "main" }}
+{{/* Section list — rendered as a Finder-style window */}}
+<div class="desktop-icons" style="top:16px;right:16px;">
+  <div class="desktop-icon" onclick="window.location.href='/'">
+    <div class="desktop-icon-img">🏠</div>
+    <div class="desktop-icon-label">Home</div>
+  </div>
+</div>
+
+<div class="macos-window visible"
+     style="width:700px;height:520px;top:50px;left:calc(50vw - 350px);z-index:300;">
+  <div class="win-chrome">
+    <div class="traffic-lights">
+      <button class="tl-btn tl-close" onclick="window.location.href='/'"></button>
+      <button class="tl-btn tl-min" onclick=""></button>
+      <button class="tl-btn tl-max" onclick=""></button>
+    </div>
+    <div class="win-title">{{ .Title }}</div>
+  </div>
+
+  <div style="flex:1;overflow-y:auto;background:#fff;user-select:text;">
+
+    {{ if .Content }}
+    <div style="padding:16px 20px 8px;font-size:13px;color:#555;
+                border-bottom:1px solid rgba(0,0,0,0.06);line-height:1.6;">
+      {{ .Content }}
+    </div>
+    {{ end }}
+
+    {{ if .Pages }}
+      <div style="padding:4px 0;">
+        <div class="finder-list-header" style="padding:6px 20px;">
+          <span>Name</span><span>Date</span>
+        </div>
+        {{ range .Pages }}
+        <a class="finder-list-item" href="{{ .Permalink }}" style="margin:1px 8px;">
+          <div class="finder-list-item-name">
+            <span class="finder-list-item-icon">📄</span>
+            {{ .Title }}
+          </div>
+          <span class="finder-list-item-date">{{ .Date.Format "Jan 2, 2006" }}</span>
+        </a>
+        {{ end }}
+      </div>
+    {{ else }}
+      <div class="notes-empty" style="height:300px;">
+        <span style="font-size:48px;">📂</span>
+        <span>Nothing here yet</span>
+      </div>
+    {{ end }}
+
+  </div>
+</div>
+{{ end }}

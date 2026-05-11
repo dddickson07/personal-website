@@ -1,7 +1,7 @@
 baseURL = "https://example.netlify.app/"
 languageCode = "en-us"
 title = "David's Dots"
-theme = "minimal"
+theme = "macos"
 
 [params]
   tagline = "A personal corner of the internet"

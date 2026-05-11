@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "en-us" }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} — {{ .Site.Title }}{{ end }}</title>
+  <meta name="description" content="{{ with .Params.description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+  <meta name="author" content="{{ .Site.Params.author }}">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{{ .Title }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ .Permalink }}">
+
+  <!-- RSS -->
+  {{ range .AlternativeOutputFormats -}}
+    {{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+  {{ end }}
+
+  <link rel="stylesheet" href="/css/macos.css">
+</head>
+<body class="macos-desktop">
+
+  <!-- ── Menu Bar ──────────────────────────────────────────── -->
+  <div class="menubar">
+    <div class="menubar-left">
+      <span class="menubar-apple" title="David's Dots">⌘</span>
+      <span class="menubar-appname">{{ .Site.Title }}</span>
+      <div class="menubar-menu">
+        <span class="menubar-item" onclick="openApp('about')">About</span>
+        <span class="menubar-item" onclick="openApp('finder')">Projects</span>
+        <span class="menubar-item" onclick="openApp('notes')">Notes</span>
+        <span class="menubar-item" onclick="openApp('calendar')">Now</span>
+      </div>
+    </div>
+    <div class="menubar-right">
+      <span class="menubar-icon">📶</span>
+      <span class="menubar-icon">🔋</span>
+      <span id="menubar-time">Loading…</span>
+    </div>
+  </div>
+
+  <!-- ── Desktop ───────────────────────────────────────────── -->
+  <div class="desktop">
+
+    {{ block "main" . }}{{ end }}
+
+  </div>
+
+  <!-- ── Dock ──────────────────────────────────────────────── -->
+  <div class="dock-container">
+    <div class="dock">
+
+      <div class="dock-item" data-app="about" onclick="openApp('about')" title="About Me">
+        <div class="dock-icon finder-icon" style="background:linear-gradient(160deg,#a8d8ff 0%,#4a9eff 50%,#1a6fd4 100%)">👤</div>
+        <div class="dock-dot"></div>
+        <div class="dock-label">About Me</div>
+      </div>
+
+      <div class="dock-item" data-app="finder" onclick="openApp('finder')" title="Finder">
+        <div class="dock-icon finder-icon">🗂</div>
+        <div class="dock-dot"></div>
+        <div class="dock-label">Finder</div>
+      </div>
+
+      <div class="dock-item" data-app="notes" onclick="openApp('notes')" title="Notes">
+        <div class="dock-icon notes-icon">📝</div>
+        <div class="dock-dot"></div>
+        <div class="dock-label">Notes</div>
+      </div>
+
+      <div class="dock-item" data-app="photos" onclick="openApp('photos')" title="Photos">
+        <div class="dock-icon photos-icon">🌅</div>
+        <div class="dock-dot"></div>
+        <div class="dock-label">Photos</div>
+      </div>
+
+      <div class="dock-item" data-app="music" onclick="openApp('music')" title="Music">
+        <div class="dock-icon music-icon">🎵</div>
+        <div class="dock-dot"></div>
+        <div class="dock-label">Music</div>
+      </div>
+
+      <div class="dock-item" data-app="calendar" onclick="openApp('calendar')" title="Calendar">
+        <div class="dock-icon calendar-icon">📅</div>
+        <div class="dock-dot"></div>
+        <div class="dock-label">Calendar</div>
+      </div>
+
+      <div class="dock-separator"></div>
+
+      <div class="dock-item" onclick="window.open('mailto:{{ .Site.Params.social.email }}','_blank')" title="Mail">
+        <div class="dock-icon mail-icon">✉️</div>
+        <div class="dock-dot"></div>
+        <div class="dock-label">Mail</div>
+      </div>
+
+      <div class="dock-item" onclick="window.open('{{ .Site.Params.social.github }}','_blank')" title="GitHub">
+        <div class="dock-icon github-icon" style="color:#fff;font-size:28px">🐙</div>
+        <div class="dock-dot"></div>
+        <div class="dock-label">GitHub</div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/desktop.js"></script>
+</body>
+</html>
